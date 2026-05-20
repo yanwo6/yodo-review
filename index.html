@@ -4947,7 +4947,11 @@ async function exportAll(){
     var isRatingTableMode=(templateStyle==='rating-table');
     var isCategoryCardMode=(templateStyle==='category-card');
     var isRedBlackMode=(templateStyle==='red-black');
-    if(!isDiaryMode&&!isQQMode&&!isWechatMode&&!isDouyinMode&&!isXiaohongshuMode&&!isMomentsMode&&!isPyramidMode&&!isRatingTableMode&&!isCategoryCardMode&&!isRedBlackMode&&!currentPages.length){alert('请先点击「生成」');return;}
+    var isDoubanMode=(templateStyle==='douban');
+    var isWeiboMode=(templateStyle==='weibo');
+    var isNotionMode=(templateStyle==='notion');
+    var isFeishuMode=(templateStyle==='feishu');
+    if(!isDiaryMode&&!isQQMode&&!isWechatMode&&!isDouyinMode&&!isXiaohongshuMode&&!isMomentsMode&&!isPyramidMode&&!isRatingTableMode&&!isCategoryCardMode&&!isRedBlackMode&&!isDoubanMode&&!isWeiboMode&&!isNotionMode&&!isFeishuMode&&!currentPages.length){alert('请先点击「生成」');return;}
     if(isQQMode&&currentQQPages.length===0){alert('请先点击「生成」');return;}
     if(isWechatMode&&currentWechatPages.length===0){alert('请先点击「生成」');return;}
     if(isDouyinMode&&currentDouyinPages.length===0){alert('请先点击「生成」');return;}
@@ -4957,6 +4961,10 @@ async function exportAll(){
     if(isRatingTableMode&&currentRatingTablePages.length===0){alert('请先点击「生成」');return;}
     if(isCategoryCardMode&&currentCategoryCardPages.length===0){alert('请先点击「生成」');return;}
     if(isRedBlackMode&&currentRedBlackPages.length===0){alert('请先点击「生成」');return;}
+    if(isDoubanMode&&currentDoubanPages.length===0){alert('请先点击「生成」');return;}
+    if(isWeiboMode&&currentWeiboPages.length===0){alert('请先点击「生成」');return;}
+    if(isNotionMode&&currentNotionPages.length===0){alert('请先点击「生成」');return;}
+    if(isFeishuMode&&currentFeishuPages.length===0){alert('请先点击「生成」');return;}
     const size=isRedBlackMode?getRedBlackPageSize():getPageSize();
     const progressBar=document.getElementById('progressBar');
     const progressFill=document.getElementById('progressFill');
@@ -4967,7 +4975,7 @@ async function exportAll(){
     const exportContainer=document.getElementById('exportContainer');
     let success=0;
     
-    var totalPages=isDiaryMode?currentDiaryPages.length:(isQQMode?currentQQPages.length:(isWechatMode?currentWechatPages.length:(isDouyinMode?currentDouyinPages.length:(isXiaohongshuMode?currentXiaohongshuPages.length:(isMomentsMode?currentMomentsPages.length:(isPyramidMode?currentPyramidPages.length:(isRatingTableMode?currentRatingTablePages.length:(isCategoryCardMode?currentCategoryCardPages.length:(isRedBlackMode?currentRedBlackPages.length:currentPages.length)))))))));
+    var totalPages=isDiaryMode?currentDiaryPages.length:(isQQMode?currentQQPages.length:(isWechatMode?currentWechatPages.length:(isDouyinMode?currentDouyinPages.length:(isXiaohongshuMode?currentXiaohongshuPages.length:(isMomentsMode?currentMomentsPages.length:(isPyramidMode?currentPyramidPages.length:(isRatingTableMode?currentRatingTablePages.length:(isCategoryCardMode?currentCategoryCardPages.length:(isRedBlackMode?currentRedBlackPages.length:(isDoubanMode?currentDoubanPages.length:(isWeiboMode?currentWeiboPages.length:(isNotionMode?currentNotionPages.length:(isFeishuMode?currentFeishuPages.length:currentPages.length)))))))))))));
     
     for(let i=0;i<totalPages;i++){
         try{
@@ -5006,6 +5014,18 @@ async function exportAll(){
             }else if(isRedBlackMode){
                 html=renderRedBlackPage(i);
                 pageName=currentRedBlackPages[i]?('红黑榜_'+(i+1)):'红黑榜_'+(i+1);
+            }else if(isDoubanMode){
+                html=renderDoubanPage(i);
+                pageName='豆瓣_'+(i+1);
+            }else if(isWeiboMode){
+                html=renderWeiboPage(i);
+                pageName='微博_'+(i+1);
+            }else if(isNotionMode){
+                html=renderNotionPage(i);
+                pageName='Notion_'+(i+1);
+            }else if(isFeishuMode){
+                html=renderFeishuPage(i);
+                pageName='飞书_'+(i+1);
             }else{
                 var bgStyle=getBgStyle();
                 var bgSolidColor=getBgSolidColor();
@@ -5019,7 +5039,7 @@ async function exportAll(){
             exportContainer.innerHTML=html;
             await new Promise(r=>setTimeout(r,300));
             const el=exportContainer.firstElementChild;
-            var bgColor=isDiaryMode?DIARY_COLORS.bg:(isQQMode?'#EBEBEB':(isWechatMode?'#EDEDED':(isDouyinMode?'#1a1a1a':(isXiaohongshuMode?'#FFFFFF':(isMomentsMode?'#FFFFFF':(isPyramidMode?'#0a1628':(isRatingTableMode?'#FFFFFF':(isCategoryCardMode?'#F5F0E8':(isRedBlackMode?'#FFFFFF':(templateStyle==='memo'?'#FFFFFF':getBgSolidColor()))))))))));
+            var bgColor=isDiaryMode?DIARY_COLORS.bg:(isQQMode?'#EBEBEB':(isWechatMode?'#EDEDED':(isDouyinMode?'#1a1a1a':(isXiaohongshuMode?'#FFFFFF':(isMomentsMode?'#FFFFFF':(isPyramidMode?'#0a1628':(isRatingTableMode?'#FFFFFF':(isCategoryCardMode?'#F5F0E8':(isRedBlackMode?'#FFFFFF':(isDoubanMode?'#F5F5F5':(isWeiboMode?'#FFFFFF':(isNotionMode?'#FFFFFF':(isFeishuMode?'#FFFFFF':(templateStyle==='memo'?'#FFFFFF':getBgSolidColor()))))))))))))));
             const canvas=await html2canvas(el,{scale:2,backgroundColor:bgColor,useCORS:true,width:size.w,height:size.h});
             if(canvas.width<10)throw new Error('截图异常');
             const blob=await new Promise((res,rej)=>{canvas.toBlob(b=>{if(!b||b.size<100)rej(new Error('图片为空'));else res(b);},'image/jpeg',0.95);});
@@ -5058,7 +5078,11 @@ async function saveToPhone(){
     var isRatingTableMode=(templateStyle==='rating-table');
     var isCategoryCardMode=(templateStyle==='category-card');
     var isRedBlackMode=(templateStyle==='red-black');
-    if(!isDiaryMode&&!isQQMode&&!isWechatMode&&!isDouyinMode&&!isXiaohongshuMode&&!isMomentsMode&&!isPyramidMode&&!isRatingTableMode&&!isCategoryCardMode&&!isRedBlackMode&&!currentPages.length){alert('请先点击「生成」');return;}
+    var isDoubanMode=(templateStyle==='douban');
+    var isWeiboMode=(templateStyle==='weibo');
+    var isNotionMode=(templateStyle==='notion');
+    var isFeishuMode=(templateStyle==='feishu');
+    if(!isDiaryMode&&!isQQMode&&!isWechatMode&&!isDouyinMode&&!isXiaohongshuMode&&!isMomentsMode&&!isPyramidMode&&!isRatingTableMode&&!isCategoryCardMode&&!isRedBlackMode&&!isDoubanMode&&!isWeiboMode&&!isNotionMode&&!isFeishuMode&&!currentPages.length){alert('请先点击「生成」');return;}
     if(isQQMode&&currentQQPages.length===0){alert('请先点击「生成」');return;}
     if(isWechatMode&&currentWechatPages.length===0){alert('请先点击「生成」');return;}
     if(isDouyinMode&&currentDouyinPages.length===0){alert('请先点击「生成」');return;}
@@ -5068,12 +5092,16 @@ async function saveToPhone(){
     if(isRatingTableMode&&currentRatingTablePages.length===0){alert('请先点击「生成」');return;}
     if(isCategoryCardMode&&currentCategoryCardPages.length===0){alert('请先点击「生成」');return;}
     if(isRedBlackMode&&currentRedBlackPages.length===0){alert('请先点击「生成」');return;}
+    if(isDoubanMode&&currentDoubanPages.length===0){alert('请先点击「生成」');return;}
+    if(isWeiboMode&&currentWeiboPages.length===0){alert('请先点击「生成」');return;}
+    if(isNotionMode&&currentNotionPages.length===0){alert('请先点击「生成」');return;}
+    if(isFeishuMode&&currentFeishuPages.length===0){alert('请先点击「生成」');return;}
     const size=isRedBlackMode?getRedBlackPageSize():getPageSize();
     const progressText=document.getElementById('progressText');
     progressText.textContent='📱 正在生成图片...';
     savePhoneImages=[];
     const exportContainer=document.getElementById('exportContainer');
-    var totalPages=isDiaryMode?currentDiaryPages.length:(isQQMode?currentQQPages.length:(isWechatMode?currentWechatPages.length:(isDouyinMode?currentDouyinPages.length:(isXiaohongshuMode?currentXiaohongshuPages.length:(isMomentsMode?currentMomentsPages.length:(isPyramidMode?currentPyramidPages.length:(isRatingTableMode?currentRatingTablePages.length:(isCategoryCardMode?currentCategoryCardPages.length:(isRedBlackMode?currentRedBlackPages.length:currentPages.length)))))))));
+    var totalPages=isDiaryMode?currentDiaryPages.length:(isQQMode?currentQQPages.length:(isWechatMode?currentWechatPages.length:(isDouyinMode?currentDouyinPages.length:(isXiaohongshuMode?currentXiaohongshuPages.length:(isMomentsMode?currentMomentsPages.length:(isPyramidMode?currentPyramidPages.length:(isRatingTableMode?currentRatingTablePages.length:(isCategoryCardMode?currentCategoryCardPages.length:(isRedBlackMode?currentRedBlackPages.length:(isDoubanMode?currentDoubanPages.length:(isWeiboMode?currentWeiboPages.length:(isNotionMode?currentNotionPages.length:(isFeishuMode?currentFeishuPages.length:currentPages.length)))))))))))));
     for(let i=0;i<totalPages;i++){
         try{
             var html;
@@ -5095,6 +5123,14 @@ async function saveToPhone(){
                 html=renderCategoryCardPage(i);
             }else if(isRedBlackMode){
                 html=renderRedBlackPage(i);
+            }else if(isDoubanMode){
+                html=renderDoubanPage(i);
+            }else if(isWeiboMode){
+                html=renderWeiboPage(i);
+            }else if(isNotionMode){
+                html=renderNotionPage(i);
+            }else if(isFeishuMode){
+                html=renderFeishuPage(i);
             }else{
                 var bgStyle=getBgStyle();
                 var bgSolidColor=getBgSolidColor();
@@ -5107,7 +5143,7 @@ async function saveToPhone(){
             exportContainer.innerHTML=html;
             await new Promise(r=>setTimeout(r,300));
             const el=exportContainer.firstElementChild;
-            var bgColor=isDiaryMode?DIARY_COLORS.bg:(isQQMode?'#EBEBEB':(isWechatMode?'#EDEDED':(isDouyinMode?'#1a1a1a':(isXiaohongshuMode?'#FFFFFF':(isMomentsMode?'#FFFFFF':(isPyramidMode?'#0a1628':(isRatingTableMode?'#FFFFFF':(isCategoryCardMode?'#F5F0E8':(isRedBlackMode?'#FFFFFF':(templateStyle==='memo'?'#FFFFFF':getBgSolidColor()))))))))));
+            var bgColor=isDiaryMode?DIARY_COLORS.bg:(isQQMode?'#EBEBEB':(isWechatMode?'#EDEDED':(isDouyinMode?'#1a1a1a':(isXiaohongshuMode?'#FFFFFF':(isMomentsMode?'#FFFFFF':(isPyramidMode?'#0a1628':(isRatingTableMode?'#FFFFFF':(isCategoryCardMode?'#F5F0E8':(isRedBlackMode?'#FFFFFF':(isDoubanMode?'#F5F5F5':(isWeiboMode?'#FFFFFF':(isNotionMode?'#FFFFFF':(isFeishuMode?'#FFFFFF':(templateStyle==='memo'?'#FFFFFF':getBgSolidColor()))))))))))))));
             const canvas=await html2canvas(el,{scale:2,backgroundColor:bgColor,useCORS:true,width:size.w,height:size.h});
             const dataUrl=canvas.toDataURL('image/jpeg',0.95);
             savePhoneImages.push(dataUrl);
@@ -5214,7 +5250,11 @@ async function copyImageToClipboard(){
     var isRatingTableMode=(templateStyle==='rating-table');
     var isCategoryCardMode=(templateStyle==='category-card');
     var isRedBlackMode=(templateStyle==='red-black');
-    if(!isDiaryMode&&!isQQMode&&!isWechatMode&&!isDouyinMode&&!isXiaohongshuMode&&!isMomentsMode&&!isPyramidMode&&!isRatingTableMode&&!isCategoryCardMode&&!isRedBlackMode&&!currentPages.length){alert('请先点击「生成」');return;}
+    var isDoubanMode=(templateStyle==='douban');
+    var isWeiboMode=(templateStyle==='weibo');
+    var isNotionMode=(templateStyle==='notion');
+    var isFeishuMode=(templateStyle==='feishu');
+    if(!isDiaryMode&&!isQQMode&&!isWechatMode&&!isDouyinMode&&!isXiaohongshuMode&&!isMomentsMode&&!isPyramidMode&&!isRatingTableMode&&!isCategoryCardMode&&!isRedBlackMode&&!isDoubanMode&&!isWeiboMode&&!isNotionMode&&!isFeishuMode&&!currentPages.length){alert('请先点击「生成」');return;}
     if(isQQMode&&currentQQPages.length===0){alert('请先点击「生成」');return;}
     if(isWechatMode&&currentWechatPages.length===0){alert('请先点击「生成」');return;}
     if(isDouyinMode&&currentDouyinPages.length===0){alert('请先点击「生成」');return;}
@@ -5224,6 +5264,10 @@ async function copyImageToClipboard(){
     if(isRatingTableMode&&currentRatingTablePages.length===0){alert('请先点击「生成」');return;}
     if(isCategoryCardMode&&currentCategoryCardPages.length===0){alert('请先点击「生成」');return;}
     if(isRedBlackMode&&currentRedBlackPages.length===0){alert('请先点击「生成」');return;}
+    if(isDoubanMode&&currentDoubanPages.length===0){alert('请先点击「生成」');return;}
+    if(isWeiboMode&&currentWeiboPages.length===0){alert('请先点击「生成」');return;}
+    if(isNotionMode&&currentNotionPages.length===0){alert('请先点击「生成」');return;}
+    if(isFeishuMode&&currentFeishuPages.length===0){alert('请先点击「生成」');return;}
     const btn=document.querySelector('.btn-copy');
     const origText=btn.textContent;
     btn.textContent='⏳ 生成中...';
@@ -5250,6 +5294,14 @@ async function copyImageToClipboard(){
             html=renderCategoryCardPage(0);
         }else if(isRedBlackMode){
             html=renderRedBlackPage(0);
+        }else if(isDoubanMode){
+            html=renderDoubanPage(0);
+        }else if(isWeiboMode){
+            html=renderWeiboPage(0);
+        }else if(isNotionMode){
+            html=renderNotionPage(0);
+        }else if(isFeishuMode){
+            html=renderFeishuPage(0);
         }else{
             var bgStyle=getBgStyle();
             var bgSolidColor=getBgSolidColor();
@@ -5262,7 +5314,7 @@ async function copyImageToClipboard(){
         exportContainer.innerHTML=html;
         await new Promise(r=>setTimeout(r,300));
         const el=exportContainer.firstElementChild;
-        var bgColor=isDiaryMode?DIARY_COLORS.bg:(isQQMode?'#EBEBEB':(isWechatMode?'#EDEDED':(isDouyinMode?'#1a1a1a':(isXiaohongshuMode?'#FFFFFF':(isMomentsMode?'#FFFFFF':(isPyramidMode?'#0a1628':(isRatingTableMode?'#FFFFFF':(isCategoryCardMode?'#F5F0E8':(isRedBlackMode?'#FFFFFF':(templateStyle==='memo'?'#FFFFFF':getBgSolidColor()))))))))));
+        var bgColor=isDiaryMode?DIARY_COLORS.bg:(isQQMode?'#EBEBEB':(isWechatMode?'#EDEDED':(isDouyinMode?'#1a1a1a':(isXiaohongshuMode?'#FFFFFF':(isMomentsMode?'#FFFFFF':(isPyramidMode?'#0a1628':(isRatingTableMode?'#FFFFFF':(isCategoryCardMode?'#F5F0E8':(isRedBlackMode?'#FFFFFF':(isDoubanMode?'#F5F5F5':(isWeiboMode?'#FFFFFF':(isNotionMode?'#FFFFFF':(isFeishuMode?'#FFFFFF':(templateStyle==='memo'?'#FFFFFF':getBgSolidColor()))))))))))))));
         const canvas=await html2canvas(el,{scale:2,backgroundColor:bgColor,useCORS:true,width:size.w,height:size.h});
         exportContainer.innerHTML='';
         await copyCanvasToClipboard(canvas);
@@ -5294,7 +5346,7 @@ async function copyImageToClipboard(){
             exportContainer2.innerHTML=html2;
             await new Promise(r=>setTimeout(r,300));
             const el2=exportContainer2.firstElementChild;
-            var bgColor2=isDiaryMode?DIARY_COLORS.bg:(isQQMode?'#EBEBEB':(isWechatMode?'#EDEDED':(isDouyinMode?'#1a1a1a':(isXiaohongshuMode?'#FFFFFF':(isMomentsMode?'#FFFFFF':(isPyramidMode?'#0a1628':(isRatingTableMode?'#FFFFFF':(isCategoryCardMode?'#F5F0E8':(isRedBlackMode?'#FFFFFF':(templateStyle==='memo'?'#FFFFFF':getBgSolidColor()))))))))));
+            var bgColor2=isDiaryMode?DIARY_COLORS.bg:(isQQMode?'#EBEBEB':(isWechatMode?'#EDEDED':(isDouyinMode?'#1a1a1a':(isXiaohongshuMode?'#FFFFFF':(isMomentsMode?'#FFFFFF':(isPyramidMode?'#0a1628':(isRatingTableMode?'#FFFFFF':(isCategoryCardMode?'#F5F0E8':(isRedBlackMode?'#FFFFFF':(isDoubanMode?'#F5F5F5':(isWeiboMode?'#FFFFFF':(isNotionMode?'#FFFFFF':(isFeishuMode?'#FFFFFF':(templateStyle==='memo'?'#FFFFFF':getBgSolidColor()))))))))))))));
             const canvas2=await html2canvas(el2,{scale:2,backgroundColor:bgColor2,useCORS:true,width:size2.w,height:size2.h});
             exportContainer2.innerHTML='';
             openImageInNewTab(canvas2);
