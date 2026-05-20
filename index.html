@@ -5025,13 +5025,13 @@ async function exportAll(){
             const blob=await new Promise((res,rej)=>{canvas.toBlob(b=>{if(!b||b.size<100)rej(new Error('图片为空'));else res(b);},'image/jpeg',0.95);});
             zip.file(`测评图_${String(i+1).padStart(2,'0')}_${pageName}.jpg`,blob);
             success++;
-        }catch(e){console.error(`第${i+1}张失败:`,e);}
+        }catch(e){console.error(`第${i+1}张失败:`,e);window.__exportErrors=window.__exportErrors||[];window.__exportErrors.push({page:i+1,error:e.message||String(e)});}
         progressFill.style.width=`${((i+1)/totalPages)*100}%`;
         progressText.textContent=`生成中 ${i+1}/${totalPages}...`;
         await new Promise(r=>setTimeout(r,50));
     }
     exportContainer.innerHTML='';
-    if(success===0){alert('所有图片生成失败，请刷新重试');progressBar.style.display='none';return;}
+    if(success===0){var errMsg=window.__exportErrors?window.__exportErrors.map(function(e){return '第'+e.page+'张: '+e.error;}).join('\n'):'';alert('所有图片生成失败，请刷新重试\n\n错误详情:\n'+errMsg);console.log('导出错误详情:',window.__exportErrors);progressBar.style.display='none';return;}
     progressText.textContent='打包中...';
     const content=await zip.generateAsync({type:'blob'});
     const zipName=`测评图_${success}张_${Date.now()}.zip`;
@@ -5111,7 +5111,7 @@ async function saveToPhone(){
             const canvas=await html2canvas(el,{scale:2,backgroundColor:bgColor,useCORS:true,width:size.w,height:size.h});
             const dataUrl=canvas.toDataURL('image/jpeg',0.95);
             savePhoneImages.push(dataUrl);
-        }catch(e){console.error(`第${i+1}张失败:`,e);}
+        }catch(e){console.error(`第${i+1}张失败:`,e);window.__exportErrors=window.__exportErrors||[];window.__exportErrors.push({page:i+1,error:e.message||String(e)});}
         progressText.textContent=`📱 生成中 ${i+1}/${totalPages}...`;
     }
     exportContainer.innerHTML='';
