@@ -2403,7 +2403,7 @@ function renderAppEntry(app,idx){
 <span style="margin-left:auto;font-size:26px;font-weight:700;color:${rateColor};">🎯${app.rate}</span>
 </div>
 <div style="display:flex;gap:12px;margin-bottom:8px;font-size:22px;color:${cs.body||'#ddd'};flex-wrap:wrap;">
-<span>💰${app.cost}</span><span>👥匹配${app.match}</span><span>➕见面${app.add_friend}</span><span>📅date${app.date}</span>
+<span>👥匹配${app.match}</span><span>➕见面${app.add_friend}</span><span>📅date${app.date}</span>
 </div>
 <div style="font-size:24px;color:${cs.body||'#ccc'};line-height:1.7;">${app.review}</div>
 <div style="font-size:${24+cs.fontSizeJitter}px;color:${cs.body||'#bbb'};line-height:${(1.7+cs.lineHeightJitter).toFixed(2)};margin-top:6px;padding-left:${cs.paddingJitter}px;">${app.story}</div>
@@ -3043,7 +3043,7 @@ function renderProgressAppEntry(app,idx){
   </div>
   <div style="font-size:24px;font-weight:700;color:${rateColor};">${app.rate}</div>
 </div>
-<div style="font-size:24px;color:#ddd;margin-bottom:8px;">💰${app.cost} | 👥匹配${app.match} | ➕见面${app.add_friend}</div>
+<div style="font-size:24px;color:#ddd;margin-bottom:8px;">👥匹配${app.match} | ➕见面${app.add_friend}</div>
 <div style="font-size:24px;color:#ccc;line-height:1.7;">${app.review}</div>
 <div style="font-size:24px;color:#bbb;line-height:1.7;margin-top:6px;">${app.story}</div>
 ${app.con?`<div style="font-size:24px;color:#999;line-height:1.7;margin-top:6px;">不过${app.con}。</div>`:''}
@@ -3070,7 +3070,7 @@ function renderCardAppEntry(app,idx){
     <div style="font-size:32px;font-weight:700;">${app.name}</div>
     <div style="font-size:26px;font-weight:700;color:${rateColor};">🎯 ${app.rate}</div>
   </div>
-  <div style="font-size:24px;color:#ddd;margin-bottom:8px;">💰${app.cost} | 👥匹配${app.match} | ➕见面${app.add_friend} | 📅date${app.date}</div>
+  <div style="font-size:24px;color:#ddd;margin-bottom:8px;">👥匹配${app.match} | ➕见面${app.add_friend} | 📅date${app.date}</div>
   <div style="font-size:24px;color:#ccc;line-height:1.7;">${app.review}</div>
   <div style="font-size:24px;color:#bbb;line-height:1.7;margin-top:6px;">${app.story}</div>
   ${app.con?`<div style="font-size:24px;color:#999;line-height:1.7;margin-top:6px;">不过${app.con}。</div>`:''}
@@ -3096,7 +3096,7 @@ function renderCompactAppEntry(app,idx){
     const color=underColors[idx%underColors.length];
     return `<div style="margin-bottom:20px;">
   <div style="font-size:32px;font-weight:700;border-bottom:2px solid ${color};display:inline-block;padding-bottom:4px;margin-bottom:8px;">${app.name} <span style="font-size:24px;color:${rateColor};font-weight:700;">🎯${app.rate}</span></div>
-  <div style="font-size:22px;color:#ddd;margin-bottom:6px;">💰${app.cost} · 👥${app.match}匹配 · ➕${app.add_friend}见面 · 📅${app.date}次date</div>
+  <div style="font-size:22px;color:#ddd;margin-bottom:6px;">👥${app.match}匹配 · ➕${app.add_friend}见面 · 📅${app.date}次date</div>
   <div style="font-size:24px;color:#ccc;line-height:1.7;">${app.review}</div>
   <div style="font-size:24px;color:#bbb;line-height:1.7;margin-top:6px;">${app.story}</div>
   ${app.con?`<div style="font-size:24px;color:#999;line-height:1.7;margin-top:6px;">不过${app.con}。</div>`:''}
@@ -3124,7 +3124,7 @@ function renderSidebarAppEntry(app,idx){
   <div style="width:6px;border-radius:3px;background:${color};flex-shrink:0;"></div>
   <div style="flex:1;">
     <div style="font-size:32px;font-weight:700;margin-bottom:6px;">${app.name} <span style="color:${rateColor};">🎯${app.rate}</span></div>
-    <div style="font-size:24px;color:#ddd;margin-bottom:8px;">💰${app.cost} | 👥匹配${app.match} | ➕见面${app.add_friend}</div>
+    <div style="font-size:24px;color:#ddd;margin-bottom:8px;">👥匹配${app.match} | ➕见面${app.add_friend}</div>
     <div style="font-size:24px;color:#ccc;line-height:1.7;">${app.review}</div>
     <div style="font-size:24px;color:#bbb;line-height:1.7;margin-top:6px;">${app.story}</div>
     ${app.con?`<div style="font-size:24px;color:#999;line-height:1.7;margin-top:6px;">不过${app.con}。</div>`:''}
@@ -7129,7 +7129,7 @@ function renderXiaohongshuAppEntry(app, idx){
         html += '<div style="font-size:18px;font-weight:700;color:' + C.text + ';margin-bottom:6px;">' + app.name + '</div>';
     }
     html += '<div style="font-size:14px;line-height:1.8;color:' + C.text + ';">';
-    html += '🎯得吃率' + app.rate + ' 💰花费' + app.cost + ' 👥匹配' + app.match + ' ➕见面' + app.add_friend;
+    html += '🎯得吃率' + app.rate + ' 👥匹配' + app.match + ' ➕见面' + app.add_friend;
     html += '</div>';
     if(app.review){
         html += '<div style="font-size:14px;line-height:1.8;color:' + C.text + ';margin-top:4px;">' + app.review + '</div>';
@@ -7429,7 +7429,7 @@ function generateMomentsContent(apps){
     // My app first (detailed)
     apps.forEach(function(app){
         if(app.is_mine){
-            var myText = '✨' + app.name + '：🎯得吃率' + app.rate + ' 💰花费' + app.cost + ' 👥匹配' + app.match + ' ➕见面' + app.add_friend;
+            var myText = '✨' + app.name + '：🎯得吃率' + app.rate + ' 👥匹配' + app.match + ' ➕见面' + app.add_friend;
             if(app.review) myText += '。' + app.review;
             if(app.story) myText += ' ' + app.story;
             if(app.con) myText += ' 不过' + app.con;
@@ -7440,7 +7440,7 @@ function generateMomentsContent(apps){
     // Competitors (brief)
     apps.forEach(function(app){
         if(!app.is_mine){
-            var compText = app.name + '：🎯得吃率' + app.rate + ' 💰' + app.cost + ' 👥' + app.match + ' ➕' + app.add_friend;
+            var compText = app.name + '：🎯得吃率' + app.rate + ' 👥' + app.match + ' ➕' + app.add_friend;
             if(app.review) compText += '。' + app.review;
             if(app.story) compText += ' ' + app.story;
             parts.push(compText);
@@ -7602,7 +7602,7 @@ function renderDoubanAppEntry(app, idx){
     html += '<span style="font-size:18px;font-weight:700;color:' + (isMine ? C.green : '#333') + ';">' + app.name + '</span>';
     html += '<span style="font-size:13px;color:' + rateColor + ';font-weight:600;margin-left:auto;">' + rateLabel + ' ' + app.rate + '</span>';
     html += '</div>';
-    html += '<div style="font-size:14px;color:#666;line-height:1.6;margin-bottom:6px;">💰花销' + app.cost + ' · 👥匹配' + app.match + ' · 🤝见面' + app.date + '</div>';
+    html += '<div style="font-size:14px;color:#666;line-height:1.6;margin-bottom:6px;">👥匹配' + app.match + ' · 🤝见面' + app.date + '</div>';
     if(app.review) html += '<div style="font-size:14px;color:#333;line-height:1.6;">' + app.review + '</div>';
     if(app.story) html += '<div style="font-size:13px;color:#666;line-height:1.7;margin-top:6px;">' + app.story + '</div>';
     if(app.con) html += '<div style="font-size:13px;color:' + C.orange + ';line-height:1.6;margin-top:4px;">⚠️ 不过' + app.con + '</div>';
@@ -7734,7 +7734,7 @@ function renderWeiboAppEntry(app, idx){
     html += '<span style="font-size:12px;color:#FFF;background:' + tagColor + ';border-radius:10px;padding:3px 10px;font-weight:700;">' + tagText + '</span>';
     html += '<span style="font-size:16px;color:' + (isMine ? C.orange : C.subtitle) + ';font-weight:700;margin-left:auto;">🎯得吃率' + app.rate + '</span>';
     html += '</div>';
-    html += '<div style="font-size:16px;color:#666;line-height:1.6;margin-bottom:6px;">💰花销' + app.cost + ' | 👥匹配' + app.match + ' | 🤝见面' + app.date + '</div>';
+    html += '<div style="font-size:16px;color:#666;line-height:1.6;margin-bottom:6px;">👥匹配' + app.match + ' | 🤝见面' + app.date + '</div>';
     if(app.review) html += '<div style="font-size:18px;color:#333;line-height:1.7;">' + app.review + '</div>';
     if(app.story) html += '<div style="font-size:16px;color:#555;line-height:1.7;margin-top:6px;">' + app.story + '</div>';
     if(app.con) html += '<div style="font-size:15px;color:' + C.red + ';margin-top:6px;">⚠️' + app.con + '</div>';
@@ -8004,7 +8004,7 @@ function renderFeishuAppEntry(app, idx){
     html += '</div>';
     // Data row
     html += '<div style="display:flex;gap:12px;margin-bottom:8px;font-size:13px;color:' + C.subtitle + ';">';
-    html += '<span>💰' + app.cost + '</span><span>👥匹配' + app.match + '</span><span>🤝见面' + app.date + '</span>';
+    html += '<span>👥匹配' + app.match + '</span><span>🤝见面' + app.date + '</span>';
     html += '</div>';
     // Review
     if(app.review) html += '<div style="font-size:14px;color:' + C.text + ';line-height:1.7;">' + app.review + '</div>';
