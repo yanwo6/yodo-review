@@ -60,6 +60,7 @@ h1{text-align:center;margin-bottom:20px;font-size:2rem;background:linear-gradien
 .save-phone-img{max-width:100%;max-height:70vh;border-radius:8px;box-shadow:0 0 30px rgba(0,0,0,0.5)}
 .save-phone-hint{color:#ff6b9d;font-size:16px;font-weight:600;text-align:center}
 .save-phone-counter{color:#aaa;font-size:14px}
+.save-phone-tip{color:#ffcc00;font-size:14px;margin-bottom:12px;padding:8px 12px;background:rgba(255,204,0,0.1);border-radius:8px;text-align:center}
 .save-phone-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .save-phone-btns button{padding:10px 24px;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer}
 .save-phone-close{background:rgba(255,255,255,0.15);color:#fff}
@@ -407,6 +408,7 @@ h1{text-align:center;margin-bottom:20px;font-size:2rem;background:linear-gradien
 <div class="save-phone-container">
 <div class="save-phone-hint">👆 长按图片保存到手机</div>
 <img class="save-phone-img" id="savePhoneImg" src="" alt="">
+<div class="save-phone-tip" id="savePhoneTip" style="display:none;text-align:center;color:#ffcc00;font-size:14px;margin-bottom:12px;padding:8px 12px;background:rgba(255,204,0,0.1);border-radius:8px;"></div>
 <div class="save-phone-counter" id="savePhoneCounter">1 / 1</div>
 <div class="save-phone-btns">
 <button class="save-phone-prev" onclick="savePhoneNav(-1)">◀ 上一张</button>
@@ -5158,16 +5160,39 @@ async function saveToPhone(){
     document.getElementById('savePhoneOverlay').classList.add('show');
 }
 
+function dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){ u8arr[n] = bstr.charCodeAt(n); }
+    return new Blob([u8arr], {type:mime});
+}
+
 function showSavePhoneImage(){
     const img=document.getElementById('savePhoneImg');
     const counter=document.getElementById('savePhoneCounter');
     const dlBtn=document.getElementById('savePhoneDl');
-    img.src=savePhoneImages[savePhoneIndex];
+    const tip=document.getElementById('savePhoneTip');
+    
+    // 转换为 blob URL 提高兼容性
+    const blob = dataURLtoBlob(savePhoneImages[savePhoneIndex]);
+    const blobUrl = URL.createObjectURL(blob);
+    img.src = blobUrl;
+    
     counter.textContent=`${savePhoneIndex+1} / ${savePhoneImages.length}`;
+    
+    // 检测是否移动端
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+        tip.textContent = '💡 长按上面的图片即可保存到手机';
+        tip.style.display = 'block';
+    } else {
+        tip.style.display = 'none';
+    }
+    
     // 下载按钮
     dlBtn.onclick=function(){
         const a=document.createElement('a');
-        a.href=savePhoneImages[savePhoneIndex];
+        a.href=blobUrl;
         a.download=`测评图_${savePhoneIndex+1}.jpg`;
         a.click();
     };
